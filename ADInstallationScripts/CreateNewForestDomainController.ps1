@@ -1,4 +1,5 @@
 # CreateNewForestDomainController.ps1
+Import-Module ServerManager
 
 param (
     [string]$DomainAddress, # domonia.local
@@ -6,6 +7,7 @@ param (
 )
 
 # Configuration du nouveau domaine
+# Configuration du mot de passe sous forme de chaine sécurisée
 $domainSafeModePassword = ConvertTo-SecureString "Password1234" -AsPlainText -Force 
 
 # Installer et configurer le nouveau domaine
