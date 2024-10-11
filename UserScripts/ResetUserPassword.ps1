@@ -1,4 +1,7 @@
+Import-Module ActiveDirectory
+
 param(
+    [Parameter(Mandatory=$true)]
     [string]$userName
 )
 

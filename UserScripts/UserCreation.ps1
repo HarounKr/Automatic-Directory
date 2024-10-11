@@ -1,8 +1,14 @@
+Import-Module ActiveDirectory
+
 param(
+    [Parameter(Mandatory=$true)]
     [string]$accountName,
+    [Parameter(Mandatory=$true)]
     [string]$orgUnit,
+    [Parameter(Mandatory=$true)]
     [string]$groupName
 )
+
 
 # Générer l'adresse e-mail et le UserPrincipalName
 $email = "$($accountName.Split(' ')[0]).$($accountName.Split(' ')[1])@domolia.com".ToLower()
