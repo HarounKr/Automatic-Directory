@@ -1,4 +1,3 @@
-# CreateNewForestDomainController.ps1
 Import-Module ServerManager
 
 param (

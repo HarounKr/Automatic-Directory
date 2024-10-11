@@ -1,4 +1,3 @@
-# JoinExistingDomainController.ps1
 param (
     [string]$DomainAddress
 )

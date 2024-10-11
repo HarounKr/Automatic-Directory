@@ -1,5 +1,3 @@
-# SaveDataBase.ps1
-
 param (
     [Parameter(Mandatory=$true)]
     [string]$Path,

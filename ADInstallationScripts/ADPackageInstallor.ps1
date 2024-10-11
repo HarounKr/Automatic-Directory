@@ -1,4 +1,3 @@
-# ADPackageInstallor.ps1
 Import-Module ServerManager
 
 # Installer les fonctionnalités nécessaires pour Active Directory
