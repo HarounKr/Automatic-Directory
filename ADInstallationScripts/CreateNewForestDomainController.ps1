@@ -1,9 +1,11 @@
-Import-Module ServerManager
-
 param (
-    [string]$DomainAddress, # domonia.local
-    [string]$NetbiosName  # DOMONIA
+    [Parameter(Mandatory=$true)]
+    [string]$DomainAddress, # domolia.local
+    [Parameter(Mandatory=$true)]
+    [string]$NetbiosName  # DOMOLIA
 )
+
+Import-Module ServerManager
 
 # Configuration du nouveau domaine
 # Configuration du mot de passe sous forme de chaine sécurisée
