@@ -3,21 +3,22 @@ param (
 )
 Import-Module ServerManager
 
-# Configuration du mot de passe sous forme de chaine s√©curis√©e
-$domainSafeModePassword = ConvertTo-SecureString "Password1234" -AsPlainText -Force 
+# Configuration du mot de passe sous forme de chaine sÈcurisÈ
+$domainSafeModePassword = ConvertTo-SecureString "Hkrifa1234" -AsPlainText -Force 
 
-# V√©rifier si le domaine est accessible
+
 try {
-    $domainController = Get-ADDomainController -DomainName $DomainAddress
-    Write-Host "Connexion au domaine $DomainAddress r√©ussie. Contr√¥leur de domaine trouv√© : $($domainController.HostName)" -ForegroundColor Green
+    # VÈrifier si le domaine est accessible
+    $domainController = Get-ADDomainController -Discover -DomainName $DomainAddress
+    Write-Host "Connexion au domaine $DomainAddress rÈussi. ContrÙleur de domaine trouvÈ : $($domainController.HostName)" -ForegroundColor Green
 
     # Promouvoir le serveur en tant que DC en le rajoutant au domaine existant 
     Install-ADDSDomainController -DomainName $DomainAddress -SafeModeAdministratorPassword $domainSafeModePassword -InstallDNS:$true -Force
     Write-Host "Le serveur a √©t√© promu en tant que contr√¥leur de domaine dans le domaine $DomainAddress." -ForegroundColor Green
 }
 catch {
-    if ($_.Exception.Message -like "*Could not find domain*") {
-        Write-Host "Le domaine sp√©cifi√© n'existe pas ou n'est pas accessible. Veuillez v√©rifier le nom du domaine et la connectivit√© r√©seau." -ForegroundColor Red
+    if ($_.Exception.Message -like "*Le domaine spÈcifiÈ níexiste pas ou nía pas pu Ítre contactÈ*") {
+        Write-Host "Le domaine spÈcifiÈ n'existe pas ou n'est pas accessible. Veuillez v√©rifier le nom du domaine et la connectivit√© r√©seau." -ForegroundColor Red
     }
     else {
         Write-Host "La promotion du serveur a √©chou√© : $_" -ForegroundColor Red
