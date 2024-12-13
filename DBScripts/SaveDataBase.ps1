@@ -1,29 +1,42 @@
 param (
     [Parameter(Mandatory=$true)]
-    [string]$Path,
+    [string]$Path,  # Chemin du fichier d'exportation
     [Parameter(Mandatory=$true)]
-    [string]$Delimiter,
-    [Parameter(ValueFromRemainingArguments=$true)]
-    [string[]]$AdditionalParameters
+    [string]$Delimiter,  # Délimiteur pour le fichier CSV
+    [Parameter(Mandatory=$true)]
+    [string[]]$AdditionalParameters  # Liste des propriétés supplémentaires à inclure
 )
+
 Import-Module ActiveDirectory
 
 function Export-ADInfo {
-    # RÃ©cupÃ©rer les informations des utilisateurs
-    $users = Get-ADUser -Filter * -Property * | Select-Object -Property $AdditionalParameters
+    param (
+        [string]$ExportPath,
+        [string]$CsvDelimiter,
+        [string[]]$Properties
+    )
 
-    # RÃ©cupÃ©rer les informations des groupes
-    $groups = Get-ADGroup -Filter * -Property * | Select-Object -Property $AdditionalParameters
+    # Récupérer les informations des utilisateurs
+    $userProperties = @('Name', 'SamAccountName', 'EmailAddress') + $Properties
+    $users = Get-ADUser -Filter * -Property $userProperties |
+             Select-Object -Property $userProperties
 
-    # Combiner les informations dans un tableau
-    $data = @($users, $groups)
+    # Récupérer les informations des groupes
+    $groupProperties = @('Name', 'GroupScope', 'GroupCategory') + $Properties
+    $groups = Get-ADGroup -Filter * -Property $groupProperties |
+              Select-Object -Property $groupProperties
 
-    # Exporter les donnÃ©es vers un fichier CSV
-    $data | Export-Csv -Path $Path -Delimiter $Delimiter -NoTypeInformation
-    Write-Host "Les donnÃ©es ont Ã©tÃ© enregistrÃ©es dans le fichier '$Path'" -ForegroundColor Green
+    # Concaténer les deux informations dans un même tableau
+    $data = $users + $groups
+
+    # Exporter les données dans un fichier CSV
+    $data | Export-Csv -Path $ExportPath -Delimiter $CsvDelimiter -Encoding UTF8
+    Write-Host "Les informations ont été exportées avec succès vers $ExportPath" -ForegroundColor Green
 }
 
-Export-ADInfo
+# Appeler la fonction avec les paramètres fournis
+Export-ADInfo -ExportPath $Path -CsvDelimiter $Delimiter -Properties $AdditionalParameters
 
 
-#test : .\SaveDataBase.ps1 -Path "C:\path\to\csv" -Delimiter ";" -AdditionalParameters "Name", "SamAccountName", "EmailAddress"
+
+# .\SaveDataBase.ps1 -Path "C:\Users\Administrateur\Desktop\data.csv" -Delimiter ";" -AdditionalParameters 'DistinguishedName', 'Description', 'ObjectClass', 'ObjectGUID', 'WhenCreated', 'WhenChanged'
