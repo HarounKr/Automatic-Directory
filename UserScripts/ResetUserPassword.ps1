@@ -1,42 +1,32 @@
-Import-Module ActiveDirectory
-
 param(
     [Parameter(Mandatory=$true)]
-    [string]$userName
+    [string]$accountName
 )
 
-function SecureStringToString {
-    param ([Security.SecureString]$secureString)
-
-    # Convertit la Secure String en Binary String
-    $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureString)
-    try {
-        # Convertit la Binary String en String
-        return [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
-    }
-    finally {
-        # ZeroFreeBSTR lib√©re la m√©moire allou√© par $bstr
-        [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
-    }
-}
+Import-Module ActiveDirectory
 
 try {
-    # Demander l'ancien mot de passe
-    $oldPassword = Read-Host -Prompt "Entrez l'ancien mot de passe pour $userName" -AsSecureString
+  
     # Demander le nouveau mot de passe
-    $newPassword = Read-Host -Prompt "Entrez le nouveau mot de passe pour $userName" -AsSecureString
-    $confirmPassword = Read-Host -Prompt "Confirmez le nouveau mot de passe pour $userName" -AsSecureString
+    $newPassword = Read-Host -AsSecureString "Entrez le nouveau mot de passe pour $accountName"
+    $confirmPassword = Read-Host -AsSecureString "Confirmez le nouveau mot de passe pour $accountName"
 
-    # V√©rifier que les deux mots de passe entr√©s sont identiques
-    $pass1 = SecureStringToString -secureString $newPassword
-    $pass2 = SecureStringToString -secureString $confirmPassword
-    if ($pass1 -eq $pass2) {
+    # Passer les mot de passe en texte brute
+    $newPasswordPlainText = [System.Net.NetworkCredential]::new("", $newPassword).Password
+    $confirmPasswordPlainText = [System.Net.NetworkCredential]::new("", $confirmPassword).Password
+    
+    # VÈrifier que les deux mots de passe entrÈes sont identiques
+    if ($newPasswordPlainText -eq $confirmPasswordPlainText) {
+    
         # Changer le mot de passe
-        Set-ADAccountPassword -Identity $userName -OldPassword $oldPassword -NewPassword $newPassword
-        Write-Host "Le mot de passe a √©t√© chang√© avec succ√®s pour l'utilisateur $userName." -ForegroundColor Green
+        Set-ADAccountPassword -Identity $accountName -NewPassword $newPassword
+        Write-Host "Le mot de passe a ÈtÈ changÈ avec succÈs pour l'utilisateur $accountName." -ForegroundColor Green
     } else {
-        Write-Host "Les mots de passe ne correspondent pas. Veuillez r√©essayer." -ForegroundColor Red
+        Write-Host "Les mots de passe ne correspondent pas. Veuillez rÈessayer." -ForegroundColor Red
     }
 } catch {
     Write-Host "Erreur lors de la modification du mot de passe : $($_.Exception.Message)"
 }
+
+
+#  .\ResetUserPassword.ps1 -accountName "hkrifa"

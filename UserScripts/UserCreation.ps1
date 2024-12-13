@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$true)]
-    [string]$name,
+    [string]$accountName,
     [Parameter(Mandatory=$true)]
     [string]$ou,
     [Parameter(Mandatory=$true)]
@@ -10,15 +10,15 @@ param(
 Import-Module ActiveDirectory
 
 # Générer l'adresse e-mail et le UserPrincipalName
-$email = "$name@domolia.com".ToLower()
+$email = "$accountName@domolia.com".ToLower()
 # Récupérer le mot de passe du compte 
 $password = (Read-Host -AsSecureString 'Entrez un mot de passe sécurisé')
 
 # Configuration des paramètres de l'utilisateur avec splatting en créaant une table de hachage
 $hashtable = @{
-    Name = $name                # nom complet de l'utilisateur
+    Name = $accountName                # nom complet de l'utilisateur
     UserPrincipalName = $email         # nom principal de l'utilisateur (UPN), qui est généralement l'adresse e-mail
-    SamAccountName = $name      # nom de compte SAM
+    SamAccountName = $accountName      # nom de compte SAM
     EmailAddress = $email              # Adresse e-mail de l'utilisateur
     Path = $ou                # L'unitée d'organisation dans laquelle l'utilisateur sera placé
     AccountPassword = $password
@@ -38,7 +38,7 @@ try {
 
 try {
     # Ajout de l'utilisateur au bon groupe
-    Add-ADGroupMember -Identity $groupName -Members $name
+    Add-ADGroupMember -Identity $groupName -Members $accountName
     Write-Host "Utilisateur ajouté au groupe avec succés." -ForegroundColor Green
 } catch {
     Write-Host "Erreur lors de l'ajout de l'utilisateur au groupe : $($_.Exception.Message)" -ForegroundColor Red
@@ -49,5 +49,5 @@ try {
  Get-ADGroup -Filter * | Where-Object {$_.Name -eq "Test"}
  OU=TestUnit,DC=domolia,DC=local
 
- .\UserCreation.ps1 -name hkrifa -ou "OU=TestUnit,DC=domolia,DC=local" -groupeName "Test"
+ .\UserCreation.ps1 -accountName hkrifa -ou "OU=TestUnit,DC=domolia,DC=local" -groupeName "Test"
 #>

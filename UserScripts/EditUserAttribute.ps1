@@ -1,4 +1,3 @@
-Import-Module ActiveDirectory
 param(
     [Parameter(Mandatory=$true)]
     [string]$accountName,
@@ -8,10 +7,15 @@ param(
     [string]$newValue
 )
 
+Import-Module ActiveDirectory
+
 # Modification de l'attribut de l'utilisateur
 try {
     Set-ADUser -Identity $accountName -Replace @{$attributeName = $newValue}
-    Write-Host "L'attribut '$attributeName' a Ã©tÃ© modifiÃ© avec succÃ¨s pour l'utilisateur '$accountName'." -ForegroundColor Green
+    Write-Host "L'attribut '$attributeName' a été modifié avec succés pour l'utilisateur '$accountName'." -ForegroundColor Green
 } catch {
-    Write-Error "Une erreur est survenue lors de la modification de l'attribut : $_ : $($_.Exception.Message)" -ForegroundColor Red
+    Write-Error "Une erreur est survenue lors de la modification de l'attribut : $_ : $($_.Exception.Message)"
 }
+
+
+# .\EditUserAttribute.ps1 -accountName "hkrifa" -attributeName "GivenName" -newValue "Le bogoss"
