@@ -1,31 +1,33 @@
 param (
     [Parameter(Mandatory=$true)]
-    [string]$Path
+    [string]$Path, # Chemin du fichier
     [Parameter(Mandatory=$true)]
-    [string]$Delimiter 
+    [string]$Delimiter #Deliliteur
 )
 
 function Load-CSVData {
-    # VÃ©rifier si le fichier existe
+    # Vérifier si le fichier existe
     if (-Not (Test-Path $Path)) {
-        Write-Host "Le fichier spÃ©cifiÃ© n'existe pas : $Path" -ForegroundColor Red
-        return
+        Write-Host "Le fichier spécifié n'existe pas : $Path" -ForegroundColor Red
+        Exit 1
     }
 
     try {
-        # Charger les donnÃ©es du fichier CSV
+        # Charger les données du fichier CSV
         $csvData = Import-Csv -Path $Path -Delimiter $Delimiter
-        Write-Host "DonnÃ©es chargÃ©es avec succÃ¨s depuis : $Path" -ForegroundColor Green
+        Write-Host "Données chargées avec succées depuis : $Path" -ForegroundColor Green
         
-        # Afficher les donnÃ©es chargÃ©es (pour vÃ©rification)
+        # Afficher les donnéees chargéees (pour vérification)
         $csvData | Format-Table -AutoSize
         return $csvData
     }
     catch {
-        Write-Host "Erreur lors du chargement des donnÃ©es : $_" -ForegroundColor Red
+        Write-Host "Erreur lors du chargement des donnéees : $_" -ForegroundColor Red
     }
 }
 
 $loadedData = Load-CSVData
 
-# .\LoadDataBase.ps1 -Path "C:\path\to\csv" -Delimiter ";"
+$loadedData
+
+# .\LoadDataBase.ps1 -Path "C:\Users\Administrateur\Desktop\data.csv" -Delimiter ";"
