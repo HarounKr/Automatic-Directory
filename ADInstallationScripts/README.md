@@ -5,25 +5,16 @@ Ces scripts PowerShell permettent d'installer et de configurer un contrôleur de
 
 ## Scripts
 
-| Nom | ADPackageInstallor.ps1 |
-|------|------------------------|
-| **Description** | Installe Active Directory et toutes les dépendances nécessaires au rôle de contrôleur de domaine |
-| **Paramètre** | Aucun paramètre requis |
-
-| Nom | CreateNewForestDomainController.ps1 |
-|------|-------------------------------------|
-| **Description** | Promeut un serveur AD en contrôleur de domaine en créant une nouvelle forêt |
-| **Paramètre** | - DomainAddress / - NetbiosName |
-
-| Nom | JoinExistingDomainController.ps1 |
-|------|----------------------------------|
-| **Description** | Promeut un serveur AD en contrôleur de domaine en rejoignant un domaine existant |
-| **Paramètre** | - DomainAddress |
+| Nom | Description | Paramètre |
+|------|------------|-----------|
+| **ADPackageInstallor.ps1** | Installe Active Directory et toutes les dépendances nécessaires au rôle de contrôleur de domaine | Aucun paramètre requis |
+| **CreateNewForestDomainController.ps1** | Promeut un serveur AD en contrôleur de domaine en créant une nouvelle forêt | - DomainAddress <br> - NetbiosName |
+| **JoinExistingDomainController.ps1** | Promeut un serveur AD en contrôleur de domaine en rejoignant un domaine existant | - DomainAddress |
 
 ## Utilisation
 
 | Script | Commande |
-|--------|---------|
+|:--------|---------:|
 | **ADPackageInstallor.ps1** | `.\ADPackageInstallor.ps1` |
 | **CreateNewForestDomainController.ps1** | `.\CreateNewForestDomainController.ps1 -DomainAddress "domolia.local" -NetbiosName "DOMOLIA"` |
 | **JoinExistingDomainController.ps1** | `.\JoinExistingDomainController.ps1 -DomainAddress "domolia.local"` |
