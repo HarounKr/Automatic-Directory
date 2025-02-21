@@ -14,7 +14,7 @@ Ces scripts PowerShell permettent d'installer et de configurer un contrôleur de
 ## Utilisation
 
 | Script | Commande |
-|:--------|---------:|
+|:--------|:---------|
 | **ADPackageInstallor.ps1** | `.\ADPackageInstallor.ps1` |
 | **CreateNewForestDomainController.ps1** | `.\CreateNewForestDomainController.ps1 -DomainAddress "domolia.local" -NetbiosName "DOMOLIA"` |
 | **JoinExistingDomainController.ps1** | `.\JoinExistingDomainController.ps1 -DomainAddress "domolia.local"` |
